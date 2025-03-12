@@ -349,9 +349,10 @@ class XMLFile {
 
         picked << "<peasoup_search>\n";
         rejected << "<peasoup_search>\n";
-
         picked << misc_info << header_parameters << search_parameters << segment_parameters << dedispersion_trials << acceleration_trials << cuda_device_parameters;
         rejected << misc_info << header_parameters << search_parameters << segment_parameters << dedispersion_trials << acceleration_trials << cuda_device_parameters;
+        picked << "<candidates>\n";
+        rejected << "<candidates>\n";
         for (const auto& c : candidates) {
             std::stringstream ss;
             ss << "    <candidate id=\"" << c->candidate_id_in_file << "\">\n";
@@ -367,6 +368,8 @@ class XMLFile {
             ss << "    </candidate>\n";
             c->is_pivot ? picked << ss.str() : rejected << ss.str();
         }
+        picked << "</candidates>\n";
+        rejected << "</candidates>\n";
         picked << execution_times;
         rejected << execution_times;
 
@@ -545,7 +548,7 @@ int main(int argc, char** argv) {
     int opt;
     double period_thresh = 1e-7;
     double dm_thresh = 100;
-    int ncpus = 180;
+    int ncpus = 8;
     std::vector<std::string> xml_files;
 
     // Parse options
